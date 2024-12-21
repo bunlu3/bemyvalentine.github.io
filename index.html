@@ -9,24 +9,36 @@
             margin: 0;
             padding: 0;
             height: 100vh;
+            overflow: hidden;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            background-color: #ffe6e6;
+            background: linear-gradient(45deg, red, pink);
+            background-size: 400% 400%;
+            animation: gradientBG 6s ease infinite;
             font-family: 'Comic Sans MS', cursive, sans-serif;
         }
 
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
         h1 {
-            color: #ff69b4;
             font-size: 3rem;
             text-align: center;
             margin-bottom: 2rem;
+            background: linear-gradient(45deg, #6b0f1a, #ff69b4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .buttons {
             display: flex;
             gap: 1rem;
+            justify-content: center;
         }
 
         button {
@@ -35,7 +47,6 @@
             border: none;
             border-radius: 10px;
             cursor: pointer;
-            transition: transform 0.3s, background-color 0.3s;
         }
 
         .yes {
@@ -44,37 +55,227 @@
         }
 
         .yes:hover {
-            background-color: #ff1493;
+            animation: shake 0.5s infinite;
         }
 
         .no {
             background-color: #f08080;
             color: white;
         }
+
+        @keyframes shake {
+            0%, 100% { transform: translate(0, 0); }
+            25% { transform: translate(-2px, -2px); }
+            50% { transform: translate(2px, 2px); }
+            75% { transform: translate(-2px, 2px); }
+        }
+
+        .next-page, .thank-you-page {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .calendar-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+            background-color: white;
+            padding: 1rem;
+            border-radius: 10px;
+            width: 300px;
+        }
+
+        .month-header {
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .calendar div {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            font-size: 0.9rem;
+        }
+
+        .calendar div.selected {
+            background-color: #ff69b4;
+            color: white;
+        }
+
+        .time-slot, .food-option {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            justify-content: center;
+        }
+
+        .time-slot button, .food-option button {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            background-color: #ff69b4;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .time-slot button.active, .food-option button.active {
+            background-color: #ff1493;
+        }
+
+        .submit-button {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 10px;
+            background-color: #ff1493;
+            color: white;
+            cursor: pointer;
+        }
+
+        @keyframes confetti {
+            0% { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(100vh); opacity: 0; }
+        }
+
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
+        }
+
+        .yay-message {
+            position: absolute;
+            font-size: 2rem;
+            color: #ff69b4;
+            animation: fadeInOut 2s ease-in-out;
+        }
     </style>
 </head>
 <body>
-    <h1>Will you be my Valentine?</h1>
-    <div class="buttons">
-        <button class="yes">Yes</button>
-        <button class="no">No</button>
+    <div class="initial-page">
+        <h1>Will you be my Valentine?</h1>
+        <div class="buttons">
+            <button class="yes">Yes</button>
+            <button class="no">No</button>
+        </div>
+    </div>
+
+    <div class="next-page">
+        <h1>Yay! Let’s plan our day!</h1>
+        <div class="calendar-container">
+            <div class="month-header">February 2025</div>
+            <div class="calendar"></div>
+        </div>
+        <div class="time-slot">
+            <p>Select Time:</p>
+            <script>
+                const timeSlotDiv = document.querySelector('.time-slot');
+                for (let hour = 12; hour <= 23; hour++) {
+                    for (let min = 0; min < 60; min += 30) {
+                        const timeButton = document.createElement('button');
+                        const time = `${hour % 12 || 12}:${min.toString().padStart(2, '0')} ${hour < 12 ? 'AM' : 'PM'}`;
+                        timeButton.textContent = time;
+                        timeButton.addEventListener('click', () => {
+                            document.querySelectorAll('.time-slot button').forEach(btn => btn.classList.remove('active'));
+                            timeButton.classList.add('active');
+                        });
+                        timeSlotDiv.appendChild(timeButton);
+                    }
+                }
+            </script>
+        </div>
+        <div class="food-option">
+            <p>Select Food:</p>
+            <button onclick="toggleActive(this)">Pizza</button>
+            <button onclick="toggleActive(this)">Sushi</button>
+            <button onclick="toggleActive(this)">Steak</button>
+            <button onclick="toggleActive(this)">Vegetarian</button>
+        </div>
+        <button class="submit-button">Submit</button>
+    </div>
+
+    <div class="thank-you-page">
+        <h1 class="thank-you-message">Thank you for being the best :)</h1>
     </div>
 
     <script>
+        const yesButton = document.querySelector('.yes');
         const noButton = document.querySelector('.no');
+        const initialPage = document.querySelector('.initial-page');
+        const nextPage = document.querySelector('.next-page');
+        const thankYouPage = document.querySelector('.thank-you-page');
+        const calendarDiv = document.querySelector('.calendar');
 
         noButton.addEventListener('mouseenter', () => {
             const randomX = Math.random() * (window.innerWidth - noButton.offsetWidth);
             const randomY = Math.random() * (window.innerHeight - noButton.offsetHeight);
-
             noButton.style.position = 'absolute';
             noButton.style.left = `${randomX}px`;
             noButton.style.top = `${randomY}px`;
         });
 
-        document.querySelector('.yes').addEventListener('click', () => {
-            alert('Yay! You said YES! ❤️');
+        yesButton.addEventListener('click', () => {
+            createConfettiAndYay();
+            initialPage.style.display = 'none';
+            nextPage.style.display = 'flex';
         });
+
+        document.querySelector('.submit-button').addEventListener('click', () => {
+            nextPage.style.display = 'none';
+            thankYouPage.style.display = 'flex';
+        });
+
+        function createConfettiAndYay() {
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement('div');
+                confetti.style.position = 'absolute';
+                confetti.style.left = `${Math.random() * 100}vw`;
+                confetti.style.top = `${Math.random() * 100}vh`;
+                confetti.style.width = '10px';
+                confetti.style.height = '10px';
+                confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
+                confetti.style.animation = 'confetti 2s linear forwards';
+                document.body.appendChild(confetti);
+                setTimeout(() => confetti.remove(), 2000);
+            }
+            for (let i = 0; i < 20; i++) {
+                const yayMessage = document.createElement('div');
+                yayMessage.className = 'yay-message';
+                yayMessage.style.left = `${Math.random() * 100}vw`;
+                yayMessage.style.top = `${Math.random() * 100}vh`;
+                yayMessage.textContent = 'Yay!';
+                document.body.appendChild(yayMessage);
+                setTimeout(() => yayMessage.remove(), 2000);
+            }
+        }
+
+        // Populate calendar
+        const daysInFebruary = Array.from({ length: 28 }, (_, i) => i + 1);
+        daysInFebruary.forEach(day => {
+            const dayDiv = document.createElement('div');
+            dayDiv.textContent = day === 14 ? `${day} ❤️` : day;
+            if (day === 14) dayDiv.classList.add('selected');
+            calendarDiv.appendChild(dayDiv);
+        });
+
+        function toggleActive(element) {
+            const siblings = element.parentElement.children;
+            for (let sibling of siblings) sibling.classList.remove('active');
+            element.classList.add('active');
+        }
     </script>
 </body>
 </html>
