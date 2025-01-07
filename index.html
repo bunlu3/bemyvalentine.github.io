@@ -197,6 +197,22 @@
                 opacity: 0;
             }
         }
+
+        /* Added Sparkle Effect */
+        @keyframes sparkle {
+            0%, 100% { opacity: 0; transform: scale(0.5); }
+            50% { opacity: 1; transform: scale(1); }
+        }
+
+        .sparkle {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            background-color: yellow;
+            border-radius: 50%;
+            animation: sparkle 1s infinite;
+        }
+
     </style>
 </head>
 <body>
@@ -233,11 +249,12 @@
             </script>
         </div>
         <div class="food-option">
-            <p>Food ChoIcEEeEe :</p> 
-            <button onclick="toggleActive(this)">Pizza</button>
-            <button onclick="toggleActive(this)">Sushi</button>
-            <button onclick="toggleActive(this)">Steak</button>
-            <button onclick="toggleActive(this)">Vegetarian</button>
+            <p>restaurant choiceEEeEee :</p> 
+            <button onclick="toggleActive(this)">Fogo de Chão</button>
+            <button onclick="toggleActive(this)">O-Ku Sushi</button>
+            <button onclick="toggleActive(this)">my place 😳</button>
+            <button onclick="toggleActive(this)">ur place 😳</button>
+            <button onclick="toggleActive(this)">more + currently working on more restaurant options lol</button>
         </div>
         <button class="submit-button">Submit</button>
     </div>
@@ -311,14 +328,7 @@
             for (let sibling of siblings) sibling.classList.remove('active');
             element.classList.add('active');
         }
-        document.addEventListener('mousemove', (e) => {
-            const heart = document.createElement('div');
-            heart.classList.add('heart');
-            heart.style.left = `${e.pageX}px`;
-            heart.style.top = `${e.pageY}px`;
-            document.body.appendChild(heart);
-            setTimeout(() => heart.remove(), 2000);
-        });
+        
     </script>
 </body>
 </html>
