@@ -249,12 +249,11 @@
             </script>
         </div>
         <div class="food-option">
-            <p>restaurant choiceEEeEee :</p> 
-            <button onclick="toggleActive(this)">Fogo de Chão</button>
-            <button onclick="toggleActive(this)">O-Ku Sushi</button>
-            <button onclick="toggleActive(this)">my place 😳</button>
-            <button onclick="toggleActive(this)">ur place 😳</button>
-            <button onclick="toggleActive(this)">more + currently working on more restaurant options lol</button>
+            <p>Food ChoIcEEeEe :</p> 
+            <button onclick="toggleActive(this)">Pizza</button>
+            <button onclick="toggleActive(this)">Sushi</button>
+            <button onclick="toggleActive(this)">Steak</button>
+            <button onclick="toggleActive(this)">Vegetarian</button>
         </div>
         <button class="submit-button">Submit</button>
     </div>
@@ -328,7 +327,14 @@
             for (let sibling of siblings) sibling.classList.remove('active');
             element.classList.add('active');
         }
-        
+        document.addEventListener('mousemove', (e) => {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.style.left = `${e.pageX}px`;
+            heart.style.top = `${e.pageY}px`;
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 2000);
+        });
     </script>
 </body>
 </html>
